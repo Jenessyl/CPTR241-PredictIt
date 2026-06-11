@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import '../models/market.dart';
 import '../utils/formatters.dart';
-import 'bet_sheet.dart';
+import 'package:go_router/go_router.dart';
 
 class MarketCard extends StatelessWidget {
   const MarketCard({
@@ -18,14 +18,7 @@ class MarketCard extends StatelessWidget {
       padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 2),
       child: Card(
         child: InkWell(
-          onTap: () {
-            showModalBottomSheet<void>(
-            context: context,
-            isScrollControlled: true,
-            builder: (_) => BetSheet(market: market),
-            ); 
-            // this MarketCard accepts an onTap callback. The most apparent benefit this provides is that it is easier to read and understand, especially since I am learning about onTap()
-          },
+          onTap: () => context.push('/market/${market.id}'),
           child: Padding(
             padding: const EdgeInsets.all(12),
             child: Row(
@@ -40,12 +33,16 @@ class MarketCard extends StatelessWidget {
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      Text(
-                        market.title,
-                        maxLines: 2,
-                        overflow: TextOverflow.ellipsis,
-                        style: Theme.of(context).textTheme.titleMedium?.copyWith(
-                          fontWeight: FontWeight.bold,
+                      Hero(
+                        tag: 'market-title-${market.id}',
+                        child: Material(
+                          type: MaterialType.transparency,
+                          child: Text(
+                            market.title,
+                            maxLines: 2,
+                            overflow: TextOverflow.ellipsis,
+                            style: Theme.of(context).textTheme.titleMedium,
+                          ),
                         ),
                       ),
                       const SizedBox(height: 8),
